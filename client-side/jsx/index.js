@@ -1,3 +1,21 @@
+import React from 'react'
+import ReactDOM from 'react-dom'
+
+const Title = React.createClass({
+  render() {
+    return (
+      <div className="col-sm-12">
+        <h1> {this.props.text} </h1>
+      </div>
+    )
+  }
+})
+
+ReactDOM.render(
+  <Title text="Showing a bit of web dev"/>,
+  document.getElementById('title') 
+)
+
 // Initialize an App variable to store the app's posts
 let App = {
   posts: []
@@ -47,8 +65,8 @@ let refreshTable = () => {
   let tableBody = $('table.js-posts-table tbody')
   let html = ''
 
-  for (key in App.posts) {
-    post = App.posts[key]
+  for (let key in App.posts) {
+    let post = App.posts[key]
     html += renderRow(post)
   }
 
@@ -68,7 +86,7 @@ let createPost = () => {
   let form = $('.js-create-post-form')
   let formElement = form[0]
 
-  post = {
+  let post = {
     name: $('input:nth(0)', form).val(),
     description: $('input:nth(1)', form).val()
   }
