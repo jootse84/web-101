@@ -1,15 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-const Title = React.createClass({
-  render() {
-    return (
-      <div className="col-sm-12">
-        <h1> {this.props.text} </h1>
-      </div>
-    )
-  }
-})
+import Title from './components/title'
 
 ReactDOM.render(
   <Title text="Showing a bit of web dev"/>,
