@@ -2,10 +2,21 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 import Title from './components/title'
+import Form from './components/form'
 
 ReactDOM.render(
   <Title text="Showing a bit of web dev"/>,
   document.getElementById('title') 
+)
+
+ReactDOM.render(
+  <Form
+    name="js-update-post-form"
+    refreshTable={refreshTable}
+    hideSpinner={hideSpinner}
+    showSpinner={showSpinner}
+    buttonText="Update"/>,
+  document.getElementById('js-update-post-form')
 )
 
 // Initialize an App variable to store the app's posts
@@ -103,42 +114,22 @@ let createPost = () => {
 // Load a post into the edit post form
 let editPost = (id) => {
   let post = App.posts.filter((post) => post.id == id)[0]
-  let form = $('.js-update-post-form')
 
-  $('input[name=id]', form).val(post.id)
-  $('input[name=name]', form).val(post.name)
-  $('input[name=description]', form).val(post.description)
+  ReactDOM.unmountComponentAtNode(document.getElementById('js-update-post-form'))
+  ReactDOM.render(
+    <Form
+      name="js-update-post-form"
+      refreshTable={refreshTable}
+      hideSpinner={hideSpinner}
+      showSpinner={showSpinner}
+      idValue={post.id}
+      nameValue={post.name}
+      descValue={post.description}
+      buttonText="Update"/>,
+    document.getElementById('js-update-post-form')
+  )
 
-  scrollTo(form)
-}
-
-// Store the edited post in the server
-let updatePost = () => {
-  showSpinner()
-
-  const id = $('.js-update-post-form input:nth(0)').val()
-  let post = App.posts.filter((post) => post.id == id)[0]
-  let formElement = $('.js-update-post-form')[0]
-
-  post.name = $('.js-update-post-form input:nth(1)').val()
-  post.description = $('.js-update-post-form input:nth(2)').val()
-
-  $.ajax({
-    type: 'PUT',
-    url: `http://localhost:3000/api/posts/${id}`,
-    data: JSON.stringify({
-      name: post.name,
-      description: post.description,
-    }),
-    success: function () {
-      formElement.reset()
-      hideSpinner()
-      refreshTable()
-    },
-    error: console.log,
-    contentType: 'application/json',
-    dataType: 'json'
-  });
+  scrollTo($('.js-update-post-form'))
 }
 
 // Delete a post from server and update table
@@ -168,11 +159,6 @@ $(() => {
   $('.js-create-post-form').submit((event) => {
     event.preventDefault()
     createPost()
-  })
-
-  $('.js-update-post-form').submit((event) => {
-    event.preventDefault()
-    updatePost()
   })
 
   $(document).on('click', '.js-delete-post', (event) => {
